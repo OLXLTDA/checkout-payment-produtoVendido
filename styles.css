@@ -1,0 +1,138 @@
+/* ========================================================
+   🎨 SISTEMA DE CORES DINÂMICO (MANTIDO)
+   ======================================================== */
+:root {
+  --brand-color: #00bfa5; /* Ajustado para o verde da sua imagem de ref */
+  --brand-dark: color-mix(in srgb, var(--brand-color), black 20%);
+  --brand-hover: color-mix(in srgb, var(--brand-color), black 10%);
+  --brand-soft: color-mix(in srgb, var(--brand-color), white 60%);
+  --brand-shadow: color-mix(in srgb, var(--brand-color), transparent 80%);
+  --bg-dark: #121212;
+  --bg-panel: #1e1e1e;
+  --bg-input: #2c2c2c;
+  --text-main: #e0e0e0;
+  --text-muted: #a0a0a0;
+  --success-green: #00c853;
+  --error-red: #ff5252;
+}
+
+/* RESET & BASE */
+html, body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-dark);
+  margin: 0; padding: 0; width: 100%; color: var(--text-main);
+}
+* { box-sizing: border-box; }
+
+/* UTILS */
+.hidden { display: none !important; }
+button { cursor: pointer; transition: all 0.3s; }
+
+/* LOGIN & ADMIN (MANTIDOS IGUAIS AO ORIGINAL) */
+.login-container { display: flex; align-items: center; justify-content: center; height: 100vh; }
+.login-box { background: var(--bg-panel); padding: 40px; border-radius: 15px; text-align: center; width: 90%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #333; }
+.pin-wrapper input { background: var(--bg-input); border: 1px solid #444; border-radius: 8px; color: var(--brand-color); font-size: 32px; letter-spacing: 10px; text-align: center; width: 100%; padding: 15px; outline: none; font-family: monospace; }
+.pin-wrapper input:focus { border-color: var(--brand-color); box-shadow: 0 0 10px var(--brand-shadow); }
+.btn-login { width: 100%; padding: 15px; background: var(--brand-color); border: none; border-radius: 8px; color: #000; font-weight: bold; font-size: 16px; margin-top: 20px; }
+
+/* ADMIN STYLES */
+.top-bar { max-width: 500px; margin: 20px auto 0; text-align: right; padding: 0 10px; }
+.btn-logout { background: transparent; border: 1px solid #444; color: #aaa; padding: 5px 15px; border-radius: 20px; font-size: 12px; }
+#adminForm { max-width: 500px; margin: 10px auto 30px; background: var(--bg-panel); padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+#adminForm label { display: block; font-size: 12px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; margin-top: 15px; }
+#adminForm input { width: 100%; padding: 12px; margin-top: 5px; background: var(--bg-input); border: 1px solid #444; color: #fff; border-radius: 6px; font-size: 15px; }
+#adminForm input:focus { border-color: var(--brand-color); outline: none; }
+#btnSalvar { width: 100%; padding: 15px; background: var(--brand-color); border: none; border-radius: 8px; color: #000; font-weight: bold; margin-top: 25px; }
+.toggle-header { display: flex; justify-content: space-between; padding: 10px 15px; margin: 20px -30px 0; border-top: 1px solid #333; border-bottom: 1px solid #333; cursor: pointer; background: #252525; }
+#preset-fields-container { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-in-out; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); align-items: center; justify-content: center; z-index: 1000; }
+.modal.active { display: flex; }
+.modal-box { background: #222; padding: 30px; border-radius: 10px; max-width: 450px; width: 90%; border: 1px solid #444; text-align: center; }
+.link-display { background: #000; padding: 10px; color: var(--brand-color); word-break: break-all; margin: 20px 0; border: 1px dashed #444; font-family: monospace; }
+.actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.btn-action { padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; text-decoration: none; display: inline-block; text-align: center; }
+.btn-copy { background: #fff; color: #000; }
+.btn-view { background: #333; color: #fff; border: 1px solid #555; }
+
+/* ========================================================
+   CLIENT VIEW & CHECKOUT FORM (NOVO)
+   ======================================================== */
+.client-container { 
+  max-width: 600px; margin: 20px auto; background: var(--bg-panel); 
+  border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+}
+.header-image { width: 100%; height: 180px; background: url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') center/cover no-repeat; } /* Imagem genérica segura */
+.header-title { text-align: center; background-color: #252525; padding: 15px; border-bottom: 1px solid #333; }
+.header-title h2 { margin: 0; color: var(--brand-color); font-size: 18px; text-transform: uppercase; letter-spacing: 1px; }
+
+.content { padding: 25px; }
+
+/* Checkout Grid System */
+.checkout-title { color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; margin: 25px 0 15px 0; font-size: 14px; text-transform: uppercase; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+.checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.full-width { grid-column: span 2; }
+
+.form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; font-weight: bold; }
+.form-group input { 
+  width: 100%; background: var(--bg-input); border: 1px solid #333; 
+  color: #fff; padding: 12px; border-radius: 6px; outline: none; transition: 0.3s; 
+}
+.form-group input:focus { border-color: var(--brand-color); box-shadow: 0 0 0 2px var(--brand-shadow); }
+
+.summary-box { background: rgba(0, 191, 165, 0.1); border: 1px solid var(--brand-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+.summary-text { font-size: 13px; color: #ccc; }
+.summary-price { font-size: 20px; font-weight: bold; color: var(--brand-color); }
+
+.btn-pay { 
+  width: 100%; padding: 16px; background: var(--success-green); border: none; 
+  border-radius: 8px; color: #fff; font-weight: bold; font-size: 16px; 
+  margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-pay:hover { background: #00e676; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3); }
+.btn-pay:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+/* ========================================================
+   MODAL PIX (NOVO)
+   ======================================================== */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
+    z-index: 2000; display: none; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.3s ease;
+}
+.modal-overlay.is-visible { display: flex; opacity: 1; }
+
+.modal-content {
+    background: #1a1a1a; padding: 30px; border-radius: 16px; width: 90%; max-width: 400px;
+    position: relative; border: 1px solid #333; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+    transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.modal-overlay.is-visible .modal-content { transform: scale(1); }
+
+.close-modal { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #666; font-size: 20px; cursor: pointer; }
+.close-modal:hover { color: #fff; }
+
+.modal-header-pix { text-align: center; color: #fff; font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+.pix-body { display: flex; flex-direction: column; gap: 15px; }
+
+.qr-container { background: #fff; padding: 10px; border-radius: 10px; text-align: center; margin: 0 auto; }
+.qr-container p { color: #333; font-size: 12px; font-weight: bold; margin-bottom: 5px; }
+.qr-container img { width: 180px; height: 180px; }
+
+.pix-amount-box { background: #252525; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+.pix-amount-box span { color: #aaa; font-size: 14px; }
+.pix-amount-box .amount-value { color: var(--brand-color); font-weight: bold; font-size: 18px; }
+
+.pix-copy-box label { display: block; color: #888; font-size: 12px; margin-bottom: 5px; font-weight: bold; }
+.pix-copy-box textarea { width: 100%; background: #000; border: 1px dashed #444; color: #fff; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 12px; resize: none; }
+
+.btn-pix-action { width: 100%; padding: 14px; background: var(--brand-color); border: none; border-radius: 8px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; color: #000; }
+.btn-pix-action:hover { background: var(--success-green); }
+
+#modalHash { font-size: 10px; color: #444; text-align: center; margin-top: 5px; font-family: monospace; }
+
+@media (max-width: 600px) {
+    .checkout-grid { grid-template-columns: 1fr; }
+    .full-width { grid-column: span 1; }
+    .login-box, #adminForm { width: 95%; padding: 20px; }
+}
