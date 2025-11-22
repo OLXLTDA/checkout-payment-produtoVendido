@@ -1,18 +1,21 @@
 /* ========================================================
-   🎨 SISTEMA DE CORES DINÂMICO (MANTIDO)
+   🎨 SISTEMA DE CORES DINÂMICO
    ======================================================== */
 :root {
-  --brand-color: #b57cf2; /* Ajustado para o verde da sua imagem de ref */
+  --brand-color: #b57cf2;
   --brand-dark: color-mix(in srgb, var(--brand-color), black 20%);
   --brand-hover: color-mix(in srgb, var(--brand-color), black 10%);
   --brand-soft: color-mix(in srgb, var(--brand-color), white 60%);
   --brand-shadow: color-mix(in srgb, var(--brand-color), transparent 80%);
+  
   --bg-dark: #121212;
-  --bg-panel: #b57cf2;
+  --bg-panel: #1e1e1e; /* Fundo dos painéis */
   --bg-input: #2c2c2c;
+  
   --text-main: #e0e0e0;
   --text-muted: #a0a0a0;
-  --success-green: #00c853;
+  --success-green: #00c853; /* Verde Padrão */
+  --success-light: rgba(0, 200, 83, 0.1);
   --error-red: #ff5252;
 }
 
@@ -27,8 +30,11 @@ html, body {
 /* UTILS */
 .hidden { display: none !important; }
 button { cursor: pointer; transition: all 0.3s; }
+.text-center { text-align: center; }
+.text-success { color: var(--success-green) !important; }
+.text-error { color: var(--error-red) !important; }
 
-/* LOGIN & ADMIN (MANTIDOS IGUAIS AO ORIGINAL) */
+/* LOGIN & ADMIN */
 .login-container { display: flex; align-items: center; justify-content: center; height: 100vh; }
 .login-box { background: var(--bg-panel); padding: 40px; border-radius: 15px; text-align: center; width: 90%; max-width: 320px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 1px solid #333; }
 .pin-wrapper input { background: var(--bg-input); border: 1px solid #444; border-radius: 8px; color: var(--brand-color); font-size: 32px; letter-spacing: 10px; text-align: center; width: 100%; padding: 15px; outline: none; font-family: monospace; }
@@ -55,20 +61,41 @@ button { cursor: pointer; transition: all 0.3s; }
 .btn-view { background: #333; color: #fff; border: 1px solid #555; }
 
 /* ========================================================
-   CLIENT VIEW & CHECKOUT FORM (NOVO)
+   CLIENT VIEW & CHECKOUT FORM
    ======================================================== */
 .client-container { 
   max-width: 600px; margin: 20px auto; background: var(--bg-panel); 
   border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
 }
-.header-image { width: 100%; height: 180px; background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR0tev2hE3dzdpAruZKY9QNodWpXoiqkBagMCxCbeiXA&s=10') center/cover no-repeat; } /* Imagem genérica segura */
+.header-image { width: 100%; height: 180px; background: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRR0tev2hE3dzdpAruZKY9QNodWpXoiqkBagMCxCbeiXA&s=10') center/cover no-repeat; }
 .header-title { text-align: center; background-color: #252525; padding: 15px; border-bottom: 1px solid #333; }
 .header-title h2 { margin: 0; color: var(--brand-color); font-size: 18px; text-transform: uppercase; letter-spacing: 1px; }
 
 .content { padding: 25px; }
+.footer { text-align: center; padding: 20px; font-size: 11px; color: var(--text-muted); background: #151515; border-top: 1px solid #333; }
+
+/* Novas Classes extraídas do JS Inline */
+.client-intro { text-align: center; margin-bottom: 20px; }
+.client-success-title { color: var(--success-green); margin: 0; font-size: 22px; }
+.client-subtitle { font-size: 14px; opacity: 0.8; margin-top: 5px; }
+
+.custody-notice { 
+    background: var(--success-light); 
+    border-left: 4px solid var(--success-green); 
+    padding: 15px; 
+    border-radius: 4px; 
+    margin-bottom: 20px; 
+    text-align: left; 
+}
+.custody-text { margin: 0; font-size: 14px; line-height: 1.5; }
+.custody-highlight { color: var(--success-green); font-weight: bold; }
+.custody-info { font-size: 12px; opacity: 0.8; display: block; margin-top: 8px; }
+
+.security-section { border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 30px; margin-bottom: 15px; }
+.security-title { color: #fff; font-size: 16px; margin: 0; }
+.security-desc { font-size: 13px; opacity: 0.7; margin-bottom: 15px; }
 
 /* Checkout Grid System */
-.checkout-title { color: #fff; border-bottom: 1px solid #333; padding-bottom: 10px; margin: 25px 0 15px 0; font-size: 14px; text-transform: uppercase; font-weight: bold; display: flex; align-items: center; gap: 10px; }
 .checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .full-width { grid-column: span 2; }
 
@@ -79,9 +106,14 @@ button { cursor: pointer; transition: all 0.3s; }
 }
 .form-group input:focus { border-color: var(--brand-color); box-shadow: 0 0 0 2px var(--brand-shadow); }
 
-.summary-box { background: rgba(0, 191, 165, 0.1); border: 1px solid var(--brand-color); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
-.summary-text { font-size: 13px; color: #ccc; }
-.summary-price { font-size: 20px; font-weight: bold; color: var(--brand-color); }
+/* Address Preview */
+#address-preview {
+    font-size: 11px;
+    color: var(--success-green);
+    display: none; /* Controlado via JS */
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
 
 .btn-pay { 
   width: 100%; padding: 16px; background: var(--success-green); border: none; 
@@ -91,8 +123,10 @@ button { cursor: pointer; transition: all 0.3s; }
 .btn-pay:hover { background: #00e676; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 230, 118, 0.3); }
 .btn-pay:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
+#msgEnvio { text-align: center; font-size: 12px; margin-top: 10px; opacity: 0.7; min-height: 18px; }
+
 /* ========================================================
-   MODAL PIX (NOVO)
+   MODAL PIX
    ======================================================== */
 .modal-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -128,6 +162,8 @@ button { cursor: pointer; transition: all 0.3s; }
 
 .btn-pix-action { width: 100%; padding: 14px; background: var(--brand-color); border: none; border-radius: 8px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px; color: #000; }
 .btn-pix-action:hover { background: var(--success-green); }
+/* Estado de copiado do botão */
+.btn-pix-action.copied { background: var(--success-green); color: #fff; pointer-events: none; }
 
 #modalHash { font-size: 10px; color: #444; text-align: center; margin-top: 5px; font-family: monospace; }
 
@@ -135,4 +171,4 @@ button { cursor: pointer; transition: all 0.3s; }
     .checkout-grid { grid-template-columns: 1fr; }
     .full-width { grid-column: span 1; }
     .login-box, #adminForm { width: 95%; padding: 20px; }
-               }
+}
