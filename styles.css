@@ -2,13 +2,13 @@
    🎨 SISTEMA DE CORES DINÂMICO (MANTIDO)
    ======================================================== */
 :root {
-  --brand-color: #800080; /* Ajustado para o verde da sua imagem de ref */
+  --brand-color: #b57cf2; /* Ajustado para o verde da sua imagem de ref */
   --brand-dark: color-mix(in srgb, var(--brand-color), black 20%);
   --brand-hover: color-mix(in srgb, var(--brand-color), black 10%);
   --brand-soft: color-mix(in srgb, var(--brand-color), white 60%);
   --brand-shadow: color-mix(in srgb, var(--brand-color), transparent 80%);
   --bg-dark: #121212;
-  --bg-panel: #1e1e1e;
+  --bg-panel: #b57cf2;
   --bg-input: #2c2c2c;
   --text-main: #e0e0e0;
   --text-muted: #a0a0a0;
