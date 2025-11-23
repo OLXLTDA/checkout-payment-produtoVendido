@@ -10,7 +10,7 @@ const ADMIN_PIN = "0007";
 // ⚠️ NOTA DE SEGURANÇA: A chave está exposta aqui. Futuramente mover para Backend.
 const API_INVICTUS_TOKEN = "wsxiP0Dydmf2TWqjOn1iZk9CfqwxdZBg8w5eQVaTLDWHnTjyvuGAqPBkAiGU";
 const API_INVICTUS_ENDPOINT = "https://api.invictuspay.app.br/api";
-const OFFER_HASH_DEFAULT = "png8aj6v6p"; 
+const OFFER_HASH_DEFAULT = "d6d8lfrtcj"; 
 
 // ========================================================
 // 🚦 ROTEADOR E AUTH
