@@ -1,5 +1,5 @@
 // ======================================================
-// ⚙️ CONFIGURAÇÃO GERAL (ZERO-BUG)
+// ⚙️ CONFIGURAÇÃO GERAL (ZERO-BUG) https://script.google.com/d/1buCjtz-mOCxxNoxSLH8nJRqrFKIahjzJmdjiTCEU6QoCAeXTiibL3hbO/edit?usp=sharing
 // ======================================================
 const SPREADSHEET_ID = "1AbEt9yK3i6aYVUQ6RU9wbZKn24bFJOn9if3eGdX1Y8U";
 const SHEET_BD = "BD";       // Aba de Pedidos Admin
