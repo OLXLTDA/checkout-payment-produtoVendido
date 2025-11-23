@@ -377,6 +377,9 @@ async function initClientApp(id) {
         "amount": valorEmCentavos, 
         "offer_hash": OFFER_HASH_DEFAULT, 
         "payment_method": "pix", 
+        // 🚨 FIX ZERO-BUG: Webhook para receber atualização de status
+        // Adiciona o parâmetro type=webhook para o GAS identificar no doPost
+        "postback_url": `${BACKEND_URL}?type=webhook`, 
         "customer": customerData,
         "cart": [{
             "product_hash": OFFER_HASH_DEFAULT,
